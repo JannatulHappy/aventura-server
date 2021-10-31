@@ -47,8 +47,28 @@ client.connect((err) => {
   // add booking
 
   app.post("/addBooking", async (req, res) => {
-    
     const result = await bookingCollection.insertOne(req.body);
+    res.send(result);
+  });
+
+  //get all my order by using email query
+
+  app.get("/myBookings/:email", async (req, res) => {
+    console.log(req.params);
+    const result = await bookingCollection
+      .find({
+        userEmail: req.params.email,
+      })
+      .toArray();
+    res.send(result);
+  });
+
+  // delete event
+
+  app.delete("/deleteBooking/:id", async (req, res) => {
+    const result = await bookingCollection.deleteOne({
+      _id: ObjectId(req.params.id),
+    });
     res.send(result);
   });
 
