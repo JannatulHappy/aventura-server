@@ -51,7 +51,7 @@ client.connect((err) => {
     res.send(result);
   });
 
-  //get all my order by using email query
+  //get  my order by using email query
 
   app.get("/myBookings/:email", async (req, res) => {
     console.log(req.params);
@@ -63,7 +63,7 @@ client.connect((err) => {
     res.send(result);
   });
 
-  // delete event
+  // delete booking from my booking
 
   app.delete("/deleteBooking/:id", async (req, res) => {
     const result = await bookingCollection.deleteOne({
@@ -71,7 +71,43 @@ client.connect((err) => {
     });
     res.send(result);
   });
+  //  get all bookings
+  app.get("/allBookings", async (req, res) => {
+    const result = await bookingCollection.find({}).toArray();
+    res.send(result);
+  });
 
+  // delete booking from manage booking
+  app.delete("/Managebooking/:id", async (req, res) => {
+    const result = await bookingCollection.deleteOne({
+      _id: ObjectId(req.params.id),
+    });
+    res.send(result);
+  });
+  // add destination
+
+  app.post("/addDestination", async (req, res) => {
+    console.log(req.body);
+    const result = await destinationCollection.insertOne(req.body);
+    res.send(result);
+  });
+  // update manage booking by approved status
+  //update product
+  app.put("/update/:id", async (req, res) => {
+    const id = req.params.id;
+    const updatedStatus = req.body;
+    const filter = { _id: ObjectId(id) }
+
+    bookingCollection
+      .updateOne(filter, {
+        $set: {
+          status: updatedStatus.status,
+        },
+      })
+      .then((result) => {
+        res.send(result);
+      });
+  });
   // perform actions on the collection object
   //   client.close();
 });
