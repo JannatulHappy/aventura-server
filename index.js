@@ -54,7 +54,7 @@ client.connect((err) => {
   //get  my order by using email query
 
   app.get("/myBookings/:email", async (req, res) => {
-    console.log(req.params);
+    
     const result = await bookingCollection
       .find({
         userEmail: req.params.email,
@@ -87,7 +87,7 @@ client.connect((err) => {
   // add destination
 
   app.post("/addDestination", async (req, res) => {
-    console.log(req.body);
+ 
     const result = await destinationCollection.insertOne(req.body);
     res.send(result);
   });
@@ -96,6 +96,7 @@ client.connect((err) => {
   app.put("/update/:id", async (req, res) => {
     const id = req.params.id;
     const updatedStatus = req.body;
+    
     const filter = { _id: ObjectId(id) }
 
     bookingCollection
