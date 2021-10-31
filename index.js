@@ -26,13 +26,32 @@ client.connect((err) => {
     .db("adventura")
     .collection("destinations");
   const bookingCollection = client.db("adventura").collection("booking");
-  console.log("database connected");
-  // get all events
+  console.log(`database connected`);
+  // get all destinations
 
   app.get("/allDestinations", async (req, res) => {
     const result = await destinationCollection.find({}).toArray();
     res.send(result);
   });
+
+  // get single destination
+
+  app.get("/singleDestination/:id", (req, res) => {
+    console.log(req.params.id);
+    destinationCollection
+      .find({ _id: ObjectId(req.params.id) })
+      .toArray((err, results) => {
+        res.send(results[0]);
+      });
+  });
+  // add booking
+
+  app.post("/addBooking", async (req, res) => {
+    
+    const result = await bookingCollection.insertOne(req.body);
+    res.send(result);
+  });
+
   // perform actions on the collection object
   //   client.close();
 });
