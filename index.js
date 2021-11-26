@@ -91,23 +91,17 @@ client.connect((err) => {
     const result = await destinationCollection.insertOne(req.body);
     res.send(result);
   });
-  // update manage booking by approved status
-  //update product
-  app.put("/update/:id", async (req, res) => {
+   // update status to shipped
+   app.put("/approveBooking/:id", async (req, res) => {
     const id = req.params.id;
-    const updatedStatus = req.body;
-    
-    const filter = { _id: ObjectId(id) }
-
-    bookingCollection
-      .updateOne(filter, {
-        $set: {
-          status: updatedStatus.status,
-        },
-      })
-      .then((result) => {
-        res.send(result);
-      });
+    const query = { _id: ObjectId(id) };
+    const Booking = {
+      $set: {
+        status: "Shipped",
+      },
+    };
+    const result = await ordersCollection.updateOne(query, Booking);
+    res.json(result);
   });
   // perform actions on the collection object
   //   client.close();
